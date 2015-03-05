@@ -1,0 +1,15 @@
+data <- read.table("household_power_consumption.txt",sep=";",header=T)
+data[,1]  <- as.Date(data[,1], "%d/%m/%Y")
+data1 <- data[which(data[,1]=="2007-02-01"),]
+data2 <- data[which(data[,1]=="2007-02-02"),]
+newdata <- rbind(data1,data2)
+weekday <- paste(newdata$Date,newdata$Time)
+weekday <- as.POSIXct(weekday) 
+png(file="plot3.png", bg="transparent")
+plot(weekday,newdata$Sub_metering_1,yaxt="n",ylab="Energy sub metering",xlab="",type="l",col="black")
+y<-seq(0,30,10)
+axis(2,labels=y,at=c(1,10,20,30),las=3)
+lines(weekday,newdata$Sub_metering_2,col="red")
+lines(weekday,newdata$Sub_metering_3,col="blue")
+legend("topright", c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), col=c("black","red","blue"),lty=1)
+dev.off()
